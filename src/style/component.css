@@ -1,0 +1,62 @@
+/* tweetText */
+.tweet-box {
+  width: 100%;
+}
+.tweet-box textarea {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: block;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  height: 6rem;
+  width: 100%;
+  resize: none;
+}
+.tweet-box .poipoi-mode-message {
+  box-sizing: border-box;
+  height: 6rem;
+  margin-top: -6rem;
+  width: 100%;
+  background-color: #B2DFDB;
+  user-select: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 6rem;
+}
+.tweet-box .poipoi-mode-message img {
+  width: 4.5%;
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+  vertical-align: middle;
+}
+.tweet-box .text-limit {
+  margin-top: -2rem;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  text-align: right;
+  padding-right: 0.5rem;
+  float: right;
+}
+.tweet-box .text-limit.over {
+  font-color: #F44336;
+}
+
+/** error list */
+.error-list {
+  border: 2px solid #FFA000;
+  background-color: #FFECB3;
+  margin: 10px;
+  padding: 10px;
+}
+.error-list li {
+  margin-left: 1rem;
+}

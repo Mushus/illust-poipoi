@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "イラストぽいぽい！",
+  "description": "イラストをTwitterにもっとお手軽にポイポイ投稿しよう！",
+  "version": "0.1.0",
+  "icons": {
+    "16": "./images/icon16.png",
+    "48": "./images/icon48.png",
+    "128": "./images/icon128.png"
+  },
+  "browser_action": {
+    "default_icon": "./images/icon19.png"
+  },
+  "background": {
+    "scripts": ["./main.js"]
+  },
+  "permissions": [
+    "storage",
+    "https://api.twitter.com/",
+    "https://upload.twitter.com/",
+    "https://twitter.com/"
+  ],
+  "options_page": "./view/option.html",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

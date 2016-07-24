@@ -1,0 +1,98 @@
+.modal .modal-mask {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-container {
+  position: relative;
+}
+.modal .modal-container {
+  min-width: 480px;
+  min-height: 320px;
+  max-width: 90%;
+  max-height: 90%;
+  background-color: #fff;
+}
+.modal .modal-header {
+  overflow: hidden;
+  border-bottom: 1px solid #ddd;
+}
+.modal .modal-user-header {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 44px);
+  padding: 10px;
+  height: 32x;
+  font-size: 1.2rem;
+  line-height: 32px;
+}
+.modal .modal-close-button {
+  float: left;
+  width: 44px;
+  height: 44px;
+}
+.modal .modal-close-button button {
+  background-color: transparent;
+  border: none;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 44px;
+  font-size: 1.5rem;
+}
+.modal .modal-body {
+  margin-bottom: calc(0.8rem + 10px * 2 + 10px * 2);
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.modal .modal-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  box-sizing: border-box;
+  border-top: 1px solid #eee;
+  width: 100%;
+  height: calc(0.8rem + 10px * 2 + 10px * 2);
+  text-align: right;
+}
+
+.modal .modal-footer button {
+  display: inline-block;
+  background-color: #fff;
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 10px 10px;
+  margin: 10px 10px 10px 0;
+  width: 100px;
+  color: #888;
+  line-height: 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.modal .modal-footer button.success {
+  cursor: auto;
+  background-color: #fff;
+  border-color: #29B6F6;
+  color: #29B6F6;
+}
+
+.modal .modal-footer button:disabled {
+  cursor: auto;
+  background-color: #eee;
+  border-color: #ccc;
+  color: #ccc;
+}

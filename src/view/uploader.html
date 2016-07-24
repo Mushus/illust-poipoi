@@ -1,0 +1,53 @@
+<meta charset="utf-8">
+<title>イラストぽいぽい！</title>
+<link rel="stylesheet" href="../style/uploader.css">
+<link rel="stylesheet" href="../style/component.css">
+
+<div id="app">
+  <file-dropzone @select-file="selectImage">
+    <h1 class="app-title"><img src="../images/icon19.png">イラストぽいぽい！</h1>
+    <div class="main-container">
+      <user-selector v-ref:user-selector :users="users" :selected.sync="selectedUserId"></user-selector>
+      <div class="tweet-box-container">
+        <tweet-box :text.sync="tweetText" :poipoi-mode="!!poipoiMode" @select-file="selectImage"  @update="validateTweetText"></tweet-box>
+        <upload-image-list v-ref:images @update="validateImages"></upload-image-list>
+        <label><input type="checkbox" v-model="sensitive">不適切な内容を含む画像として設定</label>
+      </div>
+      <div class="button-field">
+        <file-select-button @select-file="selectImage"></file-select-button>
+        <button class="tweet-button" @click="tweet" :disabled="!isValid || sending">
+          <span v-if="!sending">つぶやく</span>
+          <span v-else><img src="../images/loading.gif"></span>
+        </button>
+      </div>
+      <ul class="error-list" v-show="!validation.users || !validation.tweetText || !validation.images">
+        <li v-show="!validation.users">ツイートするユーザーを設定してください。</li>
+        <li v-show="!validation.tweetText">ツイートは140文字以内です。</li>
+        <li v-show="!validation.images">画像は4個までです。</li>
+      </ul>
+    </div>
+    <div class="hint-field">
+      <div class="hint-message">{{ message.text }}</div>
+      <chara></chara>
+    </div>
+    <notification v-ref:notification></notification>
+  </dropzone>
+</div>
+
+<script src="../lib/vue.min.js"></script>
+<script src="../lib/sha1.js"></script>
+<script src="../lib/oauth.js"></script>
+<script src="../lib/jquery-3.0.0.min.js"></script>
+
+<script src="../components/ui/uploadImageList.js"></script>
+<script src="../components/ui/fileDropzone.js"></script>
+<script src="../components/ui/fileSelectButton.js"></script>
+<script src="../components/ui/userSelector.js"></script>
+<script src="../components/ui/tweetBox.js"></script>
+<script src="../components/ui/notification.js"></script>
+<script src="../components/ui/chara.js"></script>
+
+<script src="../twitter.js"></script>
+<script src="../storage.js"></script>
+<script src="../dto.js"></script>
+<script src="../controller/uploader.js"></script>

@@ -1,0 +1,241 @@
+* {
+  font-family: "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "ＭＳ ゴシック", sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+}
+
+html, body, #app, .file-dropzone {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.file-dropzone .overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.file-dropzone .overlay .dropzone-message {
+  box-sizing: border-box;
+  width: 320px;
+  height: 240px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-align: center;
+  padding: 30px;
+  font-size: 1rem;
+}
+
+.file-dropzone.hovered .overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.file-dropzone .dropzone-message img {
+  width: 50%;
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+}
+
+html {
+  background-color: #E3F2FD;
+}
+
+.app-title {
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  padding: 20px;
+  font-size: 1.5rem;
+}
+.main-container {
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  padding: 20px;
+  box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
+}
+
+/* hint message */
+.hint-field {
+  margin: 30px auto;
+  width: 600px;
+}
+.hint-field .hint-message {
+  border-radius: 10px;
+  width: calc(600px - 20px - 48px);
+  background-color: #fff;
+  padding: 10px;
+  text-align: center;
+  float: left;
+  box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
+}
+.hint-field .chara {
+  margin-left: calc(600px - 48px);
+}
+
+
+/* user-selector */
+.user-selector {
+  width: 100%;
+}
+.user-selector .list-user {
+  display: inline-block;
+  cursor: pointer;
+}
+.user-selector label.list-user input[type=radio] {
+  display: none;
+}
+.user-selector label.list-user img {
+  width: 48px;
+  opacity: 0.3;
+}
+.user-selector label.list-user input[type=radio]:checked + img {
+  opacity: 1;
+}
+
+.tweet-box-container {
+  margin: 20px 0px;
+}
+
+
+.upload-image-list {
+  margin: 10px;
+}
+.upload-image-list .image {
+  display: inline-block;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.upload-image-list .upload-image {
+  object-fit: cover;
+  width: 96px;
+  height: 96px;
+  float: left;
+}
+
+.upload-image-list button {
+  margin-left: -32px;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+}
+
+/* file-select-button */
+.file-select-button {
+  display: block;
+  float: left;
+  width: 1.5rem;
+  height: 1.5rem;
+  text-align: center;
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 5px 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+.file-select-button::before {
+  content: "";
+  display: block;
+  height: 1.5rem;
+  width: 1.5rem;
+  background: url(../images/photo.png);
+  line-height: 1.5rem;
+  font-size: 1rem;
+  background-size: 1.5rem;
+  color: #888;
+  opacity: 0.7;
+}
+.file-select-button input {
+  display: none;
+}
+
+/* tweet-button */
+.tweet-button {
+  float: left;
+  box-sizing: content-box;
+  display: block;
+  width: 80px;
+  height: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #29B6F6;
+  border-radius: 4px;
+  padding: 5px 5px;
+  margin: 5px;
+  color: #29B6F6;
+  line-height: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.tweet-button img {
+  height: 1rem;
+}
+.tweet-button[disabled] {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  color: #ccc;
+  cursor: not-allowed;
+}
+.button-field::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.notification {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+.notification .message {
+  width: 560px;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-radius: 0px 0px 4px 4px;
+  box-shadow: 0 1px 30px 5px rgba(0,0,0,0.1);
+  margin: auto;
+  overflow: hidden;
+  animation-duration: 5s;
+  animation-name: popup;
+}
+@keyframes popup {
+  0% {
+    height: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  5% {
+    height: 1.5rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  95% {
+    height: 1.5rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  100% {
+    height: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+}
+.notification .message.error {
+  background-color: #FF8A80;
+}

@@ -1,0 +1,87 @@
+* {
+  font-family: "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "ＭＳ ゴシック", sans-serif;
+  font-weight: 500;
+  font-size: 1em;
+}
+html {
+  width: 600px;
+}
+button {
+  display: inline-block;
+  background-color: #fff;
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin: 5px;
+  color: #888;
+  line-height: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#app>article>h1 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+section {
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+}
+section h1 {
+  font-size: 1.3em;
+  margin: 1rem 0;
+  margin-left: -2rem;
+}
+
+.auth-button-field {
+  text-align: center;
+  margin-top: 60px;
+}
+.user-preview {
+  margin-top: 30px;
+  text-align: center;
+}
+
+
+.user-list .message-empty {
+  border: 2px solid #FFA000;
+  background-color: #FFECB3;
+  margin: 10px;
+  padding: 10px;
+}
+
+.user-list .listed-user {
+  margin: 10px;
+  height: 64px;
+  overflow: hidden;
+}
+.user-list .listed-user .remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  float: left;
+}
+.user-list .listed-user .remove-button button {
+  padding: 5px;
+}
+.user-list .listed-user img {
+  display: block;
+  float: left;
+  width: 64px;
+  height: 64px;
+}
+.user-list .listed-user .user-screen-name, .user-list .listed-user .user-name {
+  display: block;
+  height: 24px;
+  margin-left: 128px;
+  padding-left: 16px;
+}
+
+.user-list .listed-user .user-screen-name {
+  margin-top: 8px;
+}
+.user-list .listed-user .user-name {
+  margin-bottom: 8px;
+}

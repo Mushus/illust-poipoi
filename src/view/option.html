@@ -1,0 +1,70 @@
+<meta charset="utf-8">
+<title>オプション | イラストぽいぽい！</title>
+<link rel="stylesheet" href="../style/option.css">
+<link rel="stylesheet" href="../style/modal.css">
+<link rel="stylesheet" href="../style/component.css">
+
+<div id="app">
+  <article>
+    <h1><img src="../images/icon19.png">イラストぽいぽい！</h1>
+    <section>
+      <h1>Twitterアカウント設定</h1>
+      <user-list v-ref:user-list empty-user-message="Twitterアカウントが一つも登録されていません。" :users="users">
+      </user-list>
+    </section>
+
+    <section>
+      <h1>定型文</h1>
+      <tweet-box :text.sync="tweetText" @update="validateTweetText"></tweet-box>
+      <ul class="error-list" v-show="!validation.tweetText">
+        <li v-show="!validation.tweetText">ツイートは140文字以内です。</li>
+      </ul>
+    </section>
+
+    <section>
+      <h1>ポイポイモード</h1>
+      <label><input type="checkbox" v-Model="poipoiMode">画像を選択した瞬間Twitterに投稿<label>
+    </section>
+  </article>
+
+  <modal v-ref:modal click-outside-to-close="false" @close-modal="closeModal">
+    <div slot="header">Twitterアカウントの追加</div>
+    <div slot="body">
+      <div v-if="!newUser">
+        <p>Twitterを承認してください</p>
+        <p class="auth-button-field"><button  type="button" @click="goAuthTwitter()" :disabled="isStartedAuth">Twitter承認を行う</button></p>
+      </div>
+      <div v-else>
+        <div class="user-preview">
+          <img :src="newUser.profileImageUrl">
+          <div class="user-screen-name">
+            @{{ newUser.screenName }}
+          </div>
+          <div class="user-name">
+            {{ newUser.name }}
+          </div>
+          <p>アカウントを承認しました！</p>
+        </div>
+      </div>
+    </div>
+    <div slot="footer">
+      <button type="button" @click="closeModal()">キャンセル</button>
+      <button type="button" @click="registerUser()"
+        :disabled="!isValidNewUser()" class="success">登録</button>
+    </div>
+  </modal>
+</div>
+
+<script src="../lib/vue.min.js"></script>
+<script src="../lib/sha1.js"></script>
+<script src="../lib/oauth.js"></script>
+<script src="../lib/jquery-3.0.0.min.js"></script>
+
+<script src="../components/ui/userList.js"></script>
+<script src="../components/ui/tweetBox.js"></script>
+<script src="../components/popup/modal.js"></script>
+
+<script src="../twitter.js"></script>
+<script src="../dto.js"></script>
+<script src="../storage.js"></script>
+<script src="../controller/option.js"></script>
