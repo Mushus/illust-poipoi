@@ -52,7 +52,6 @@ var app = new Vue({
       this.$watch('sensitive', (val) => Storage.save(SensitiveStorage.StorageKey, val))
       this.$watch('selectedUserId', (val) => Storage.save(SelectedUserIdStorage.StorageKey, val))
     });
-    Storage.save(SensitiveStorage.StorageKey, true);
 
     if (!(this.users || this.users.length != 0)) {
       this.validation.users = false;
