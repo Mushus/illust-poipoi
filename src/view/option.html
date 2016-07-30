@@ -25,6 +25,16 @@
       <h1>ポイポイモード</h1>
       <label><input type="checkbox" v-Model="poipoiMode">画像を選択した瞬間Twitterに投稿<label>
     </section>
+
+    <section>
+      <h1>更新履歴</h1>
+      <dl>
+        <dt>2016/07/30</dt>
+        <dd>「不適切な内容を含む画像」のチェックが保存されない問題を修正しました。</dd>
+        <dt>2016/07/23</dt>
+        <dd>「イラストぽいぽい！」をリリースしました！</dd>
+      </dl>
+    </section>
   </article>
 
   <modal v-ref:modal click-outside-to-close="false" @close-modal="closeModal">
