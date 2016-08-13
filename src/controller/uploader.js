@@ -12,6 +12,7 @@ var hintMessages = [
   'メニューのアイコンを右クリックして「オプション」！',
   '絵描いてる～？',
   'Twitterは20時が一番見てる人が多いらしいよ。',
+  '設定しだいでショートカットキーでツイートできるようになるよ。',
 ];
 
 var app = new Vue({
@@ -19,11 +20,14 @@ var app = new Vue({
   data: {
     users: [],
     tweetText: "",
+    defaultText: "",
     sensitive: false,
     selectedUserId: 0,
     sending: false,
     imageNum: 0,
     poipoiMode: false,
+    tweetKeyCtrlEnter: false,
+    tweetKeyAltEnter: false,
     message: {
       text: "",
       timer: null
@@ -43,14 +47,15 @@ var app = new Vue({
   },
   ready: function() {
     Storage.loadAll((data) => {
-      this.tweetText      = data[FixedPhraseStorage.StorageKey];
-      this.users          = data[UserStorage.StorageKey];
-      this.sensitive      = data[SensitiveStorage.StorageKey];
-      this.selectedUserId = data[SelectedUserIdStorage.StorageKey];
-      this.poipoiMode     = data[PoipoiModeStorage.StorageKey];
+      this.defaultText       = data[FixedPhraseStorage.StorageKey];
+      this.users             = data[UserStorage.StorageKey];
+      this.sensitive         = data[SensitiveStorage.StorageKey];
+      this.selectedUserId    = data[SelectedUserIdStorage.StorageKey];
+      this.poipoiMode        = data[PoipoiModeStorage.StorageKey];
+      this.tweetKeyCtrlEnter = data[TweetKeyCtrlEnterStorage.StorageKey];
+      this.tweetKeyAltEnter  = data[TweetKeyAltEnterStorage.StorageKey];
 
-      this.$watch('sensitive', (val) => Storage.save(SensitiveStorage.StorageKey, val))
-      this.$watch('selectedUserId', (val) => Storage.save(SelectedUserIdStorage.StorageKey, val))
+      this.tweetText = this.defaultText;
     });
 
     if (!(this.users || this.users.length != 0)) {
@@ -83,8 +88,12 @@ var app = new Vue({
       this.validation.hasStatus = this.imageNum > 0 || this.tweetText.length > 0;
     },
     validateTweetText: function(tweet) {
-      this.validation.tweetText = tweet.length <= 140;
       this.validation.hasStatus = this.imageNum > 0 || this.tweetText.length > 0;
+    },
+    countTweet: function(tweet) {
+      let length = twttr.txt.getTweetLength(tweet);
+      this.validation.tweetText = length <= 140;
+      return length;
     },
     selectImage: function(blob) {
       switch (blob.type) {
@@ -101,6 +110,7 @@ var app = new Vue({
       if (this.poipoiMode) setTimeout(() => this.tweet(), 100);
     },
     tweet: function() {
+      if (!this.isValid || this.sending) return;
       var self = this;
       this.sending = true;
       var user = this.$refs.userSelector.getSelectedUser();
@@ -125,12 +135,7 @@ var app = new Vue({
       .all(uploadPromise)
       .then(function(mediaIdList) {
         return new Promise(function(resolve, reject) {
-          var mediaIds = mediaIdList.join(',');
-          if (mediaIds != "") {
-            user.twitter.tweetWithMedia(text, mediaIds, sensitive, resolve, reject);
-          } else {
-            user.twitter.tweet(text, resolve, reject);
-          }
+          user.tweet({text: text, mediaIds: mediaIdList, sensitive: sensitive}, resolve);
         });
       })
       .then(function() {
@@ -138,9 +143,9 @@ var app = new Vue({
           self.$refs.notification.addMessage("ツイートしました！", false);
           self.message.text = "『 ぽいぽい！ 』";
           clearTimeout(self.message.timer);
-          self.message.timer = setTimeout(() => this.rollingMessage(), 20000);
+          self.message.timer = setTimeout(() => self.rollingMessage(), 20000);
           self.sending = false;
-          self.tweetText = "";
+          self.tweetText = self.defaultText;
           self.$refs.images.clearList();
           resolve();
         });
@@ -152,3 +157,11 @@ var app = new Vue({
     }
   }
 });
+
+onunload = () => {
+  Storage.saveAll({
+    [UserStorage.StorageKey]:           users,
+    [SensitiveStorage.StorageKey]:      sensitive,
+    [SelectedUserIdStorage.StorageKey]: selectedUserId
+  });
+};

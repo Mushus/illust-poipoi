@@ -14,19 +14,21 @@ var app = new Vue({
 
     poipoiMode: false,
 
+    tweetKeyCtrlEnter: false,
+
+    tweetKeyAltEnter: false,
+
     validation: {
       tweetText: true,
     }
   },
   ready: function() {
     Storage.loadAll((data) => {
-      this.users          = data[UserStorage.StorageKey];
-      this.poipoiMode     = data[PoipoiModeStorage.StorageKey];
-      this.tweetText      = data[FixedPhraseStorage.StorageKey];
-
-      this.$watch('users', (val) => Storage.save(UserStorage.StorageKey, val), {deep:true})
-      this.$watch('poipoiMode', (val) => Storage.save(PoipoiModeStorage.StorageKey, val))
-      this.$watch('tweetText', (val) => Storage.save(FixedPhraseStorage.StorageKey, val))
+      this.users             = data[UserStorage.StorageKey];
+      this.tweetKeyCtrlEnter = data[TweetKeyCtrlEnterStorage.StorageKey];
+      this.tweetKeyAltEnter  = data[TweetKeyAltEnterStorage.StorageKey];
+      this.poipoiMode        = data[PoipoiModeStorage.StorageKey];
+      this.tweetText         = data[FixedPhraseStorage.StorageKey];
     });
   },
   events: {
@@ -209,7 +211,21 @@ var app = new Vue({
       // HACK: 要素のv-refにケバブケースで書くとキャメルケースに変換される
       this.$refs.userList.addUser(this.newUser);
       this.closeModal();
+    },
+
+    countTweet: function(tweet) {
+      return twttr.txt.getTweetLength(tweet);
     }
   },
 
 });
+
+onunload = () => {
+  Storage.saveAll({
+    [UserStorage.StorageKey]:               app.users,
+    [TweetKeyCtrlEnterStorage.StorageKey]:  app.tweetKeyCtrlEnter,
+    [TweetKeyAltEnterStorage.StorageKey]:   app.tweetKeyAltEnter,
+    [PoipoiModeStorage.StorageKey]:         app.poipoiMode,
+    [FixedPhraseStorage.StorageKey]:        app.tweetText
+  });
+};
