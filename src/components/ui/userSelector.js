@@ -10,7 +10,7 @@
     template:
       '<div class="user-selector">'+
       '  <div v-if="users.length == 0">'+
-      '    <p>まだアカウントを登録してないようです。<a href="./option.html" target="option">オプション</a></p>'+
+      '    <p>まだアカウントを登録してないようです。<a href="./option.html">オプション</a></p>'+
       '  </div>'+
       '  <div v-else>'+
       '    <label v-for="user in users" class="list-user">'+

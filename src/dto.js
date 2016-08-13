@@ -9,14 +9,13 @@ class FileData {
   }
 
   convartDataToBase64() {
-    console.log(this);
     return btoa(String.fromCharCode.apply(null, this.data));
   }
 };
 
 function convertUint8ArrayToBinaryString(u8Array) {
 	var i, len = u8Array.length, b_str = "";
-	for (i=0; i<len; i++) {
+	for (i = 0; i < len; i++) {
 		b_str += String.fromCharCode(u8Array[i]);
 	}
 	return b_str;
@@ -24,18 +23,17 @@ function convertUint8ArrayToBinaryString(u8Array) {
 
 class User {
   constructor() {
-    this.twitter = null;
-    this.id = null;
-    this.screenName = null;
-    this.name = null;
-    this.profileImageUrl = null;
+    this.twitter          = null;
+    this.id               = null;
+    this.screenName       = null;
+    this.name             = null;
+    this.profileImageUrl  = null;
     /** 最終更新日 バグった時にAPI投げまくるの良くないので一応 */
-    this.lastModified = null;
-    this.loading = true;
+    this.lastModified     = null;
+    this.loading          = true;
   }
 
   updataByTwitter(twitterApi, callback) {
-    var self = this;
     var twitter;
     if (twitterApi == null) {
       twitter = this.twitter;
@@ -45,14 +43,14 @@ class User {
     this.twitter = twitter;
     this.loading = true;
 
-    twitter.requestAuthorizedUserInfo(function(userInfo) {
-      self.id = userInfo.id;
-      self.screenName = userInfo.screen_name;
-      self.name = userInfo.name;
-      self.profileImageUrl = self.biggerImg(userInfo.profile_image);
-      self.lastModified = +new Date();
-      self.loading = false;
-      callback && callback(self);
+    twitter.requestAuthorizedUserInfo((userInfo) => {
+      this.id               = userInfo.id;
+      this.screenName       = userInfo.screen_name;
+      this.name             = userInfo.name;
+      this.profileImageUrl  = this.biggerImg(userInfo.profile_image);
+      this.lastModified     = +new Date();
+      this.loading          = false;
+      callback && callback(this);
     });
   }
 
@@ -71,18 +69,37 @@ class User {
   /** 保存してあるデータから変換 */
   fromStorageValue(userVal) {
     var twitter = new TwitterAPI();
-    twitter.access.token = userVal.accessToken;
-    twitter.access.tokenSecret = userVal.accessTokenSecret
+    twitter.access.token        = userVal.accessToken;
+    twitter.access.tokenSecret  = userVal.accessTokenSecret
 
-    this.twitter = twitter;
-    this.id = userVal.id;
-    this.screenName = userVal.screenName;
-    this.name = userVal.name;
-    this.profileImageUrl = userVal.profileImageUrl;
-    this.lastModified = userVal.lastModified;
-    this.loading = false;
+    this.twitter          = twitter;
+    this.id               = userVal.id;
+    this.screenName       = userVal.screenName;
+    this.name             = userVal.name;
+    this.profileImageUrl  = userVal.profileImageUrl;
+    this.lastModified     = userVal.lastModified;
+    this.loading          = false;
 
     return this;
+  }
+
+  /** ツイートする */
+  tweet(option, callback) {
+    var text      = 'text'      in option? option.text      : "";
+    var mediaIds  = 'mediaIds'  in option? option.mediaIds  : [];
+    var sensitive = 'sensitive' in option? option.sensitive : true;
+
+    let beforeUpdate = (json) => {
+      this.profileImageUrl = this.biggerImg(json.user.profile_image_url);
+      callback && callback();
+    };
+
+    if (mediaIds.length > 0) {
+      let delimitedId = mediaIds.join(',');
+      this.twitter.tweetWithMedia(text, delimitedId, sensitive, beforeUpdate);
+    } else {
+      this.twitter.tweet(text, beforeUpdate);
+    }
   }
 
   /** 保存用に変換 */
@@ -90,13 +107,13 @@ class User {
     var accessToken = this.twitter? this.twitter.access.token : '';
 
     return {
-      accessToken: this.twitter? this.twitter.access.token : '',
-      accessTokenSecret: this.twitter? this.twitter.access.tokenSecret : '',
-      id: this.id,
-      screenName: this.screenName,
-      name: this.name,
-      profileImageUrl: this.profileImageUrl,
-      lastModified: this.lastModified,
+      accessToken:        this.twitter? this.twitter.access.token : '',
+      accessTokenSecret:  this.twitter? this.twitter.access.tokenSecret : '',
+      id:                 this.id,
+      screenName:         this.screenName,
+      name:               this.name,
+      profileImageUrl:    this.profileImageUrl,
+      lastModified:       this.lastModified,
     };
   }
 }

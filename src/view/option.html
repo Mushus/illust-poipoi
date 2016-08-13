@@ -15,10 +15,16 @@
 
     <section>
       <h1>定型文</h1>
-      <tweet-box :text.sync="tweetText" @update="validateTweetText"></tweet-box>
+      <tweet-box :text.sync="tweetText" @update="validateTweetText" :count-func="countTweet"></tweet-box>
       <ul class="error-list" v-show="!validation.tweetText">
         <li v-show="!validation.tweetText">ツイートは140文字以内です。</li>
       </ul>
+    </section>
+
+    <section>
+      <h1>ショートカットキー</h1>
+      <p><label><input type="checkbox" v-Model="tweetKeyCtrlEnter">Ctrl + Enterでつぶやく<label></p>
+      <p><label><input type="checkbox" v-Model="tweetKeyAltEnter">Alt + Enterでつぶやく<label></p>
     </section>
 
     <section>
@@ -29,9 +35,18 @@
     <section>
       <h1>更新履歴</h1>
       <dl>
-        <dt>2016/07/30</dt>
+        <dt>2016/08/10 ver 0.2.0</dt>
+        <dd>機能「Ctrl + Enterでつぶやく」「Alt + Enterでつぶやく」を追加しました。</dd>
+        <dd>ツイートのカウント方法をTwitterに則した方法に修正しました。</dd>
+        <dd>設定の保存を最適化しました。</dd>
+        <dd>ツイート時にその結果からプロフィール画像更新するように変更しました。</dd>
+        <dd>スクロールバーがあるときに、文字数が隠れてしまう問題を修正しました。</dd>
+        <dd>ツイート後に定型文ではなく、空白になってしまう問題を修正しました。</dd>
+        <dd>ツイート後に下部メッセージが変更されなくなる問題を修正しました。</dd>
+        <dt>2016/07/30 ver 0.1.1</dt>
+        <dd>オプションに更新履歴の項目を追加しました。</dd>
         <dd>「不適切な内容を含む画像」のチェックが保存されない問題を修正しました。</dd>
-        <dt>2016/07/23</dt>
+        <dt>2016/07/23 ver 0.1.0</dt>
         <dd>「イラストぽいぽい！」をリリースしました！</dd>
       </dl>
     </section>
@@ -68,6 +83,7 @@
 <script src="../lib/vue.min.js"></script>
 <script src="../lib/sha1.js"></script>
 <script src="../lib/oauth.js"></script>
+<script src="../lib/twitter-text.js"></script>
 <script src="../lib/jquery-3.0.0.min.js"></script>
 
 <script src="../components/ui/userList.js"></script>

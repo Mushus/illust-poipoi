@@ -10,6 +10,22 @@ class StorageStrategy {
   loadFilter(value) { return JSON.parse(value) }
 }
 
+/** Ctrl+Enterでツイート */
+class TweetKeyCtrlEnterStorage extends StorageStrategy {
+  static get StorageKey() { return 'tweet_key_ctrl_enter' }
+  get defaultValue() { return false }
+  saveFilter(value) { return JSON.stringify(!!value) }
+  loadFilter(value) { return !!JSON.parse(value) }
+}
+
+/** Alt+Enterでツイート */
+class TweetKeyAltEnterStorage extends StorageStrategy {
+  static get StorageKey() { return 'tweet_key_alt_enter' }
+  get defaultValue() { return false }
+  saveFilter(value) { return JSON.stringify(!!value) }
+  loadFilter(value) { return !!JSON.parse(value) }
+}
+
 /** ポイポイモード設定 */
 class PoipoiModeStorage extends StorageStrategy {
   static get StorageKey() { return 'poipoi_mode' }
@@ -62,36 +78,62 @@ class Storage {
       callback(
         keys.reduce((pVal, cVal, idx) => {
           let key = keys[idx];
-          pVal[key] = values[key] === undefined?
-          Storage.Items[key].defaultValue:
-          Storage.Items[key].loadFilter(values[key]);
+          let storageValue = values[key] === undefined?
+            Storage.Items[key].defaultValue:
+            Storage.Items[key].loadFilter(values[key]);
+
+          Storage.lastValue[key] = storageValue;
+          pVal[key] = storageValue;
+
           return pVal;
         }, {})
       );
     });
-
   }
 
   /** 一つの設定値を読み込む */
   static load(key, callback) {
-    chrome.storage.sync.get(key, (val) => callback(
-        val === undefined?
+    chrome.storage.sync.get(key, (val) => {
+      Storage.lastValue[key] = val;
+
+      let storageValue = val === undefined?
         Storage.Items[key].defaultValue:
-        Storage.Items[key].loadFilter(val)
-      )
-    );
+        Storage.Items[key].loadFilter(val);
+      callback(storageValue);
+    });
   }
 
   /** 保存する */
-  static save(key, val, callback = function(){}) {
-    chrome.storage.sync.set({ [key]: Storage.Items[key].saveFilter(val) }, callback);
+  static save(key, val, callback = function() {}) {
+    let saveValue = Storage.Items[key].saveFilter(val);
+    if (saveValue != Storage.lastValue[key]) {
+      chrome.storage.sync.set({ [key]: saveValue }, callback);
+    }
+  }
+
+  /** 一括保存 */
+  static saveAll(values, callback = function() {}) {
+    let saveValues = {};
+    for(let key in values) {
+      let val = values[key];
+      let saveValue = Storage.Items[key].saveFilter(val);
+      if (saveValue != Storage.lastValue[key]) {
+        saveValues[key] = saveValue;
+      }
+    }
+    chrome.storage.sync.set(saveValues, callback);
   }
 }
 /** getting for storage strategy */
 Storage.Items = {
-  [PoipoiModeStorage.StorageKey]:     new PoipoiModeStorage(),
-  [FixedPhraseStorage.StorageKey]:    new FixedPhraseStorage(),
-  [UserStorage.StorageKey]:           new UserStorage(),
-  [SensitiveStorage.StorageKey]:      new SensitiveStorage(),
-  [SelectedUserIdStorage.StorageKey]: new SelectedUserIdStorage(),
+  [TweetKeyCtrlEnterStorage.StorageKey]: new PoipoiModeStorage(),
+  [TweetKeyAltEnterStorage.StorageKey]:  new PoipoiModeStorage(),
+  [PoipoiModeStorage.StorageKey]:        new PoipoiModeStorage(),
+  [FixedPhraseStorage.StorageKey]:       new FixedPhraseStorage(),
+  [UserStorage.StorageKey]:              new UserStorage(),
+  [SensitiveStorage.StorageKey]:         new SensitiveStorage(),
+  [SelectedUserIdStorage.StorageKey]:    new SelectedUserIdStorage(),
 };
+
+/** 最後の取得した値(保存時に差分調べるためにつかう) */
+Storage.lastValue = [];

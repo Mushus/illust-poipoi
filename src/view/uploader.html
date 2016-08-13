@@ -9,7 +9,15 @@
     <div class="main-container">
       <user-selector v-ref:user-selector :users="users" :selected.sync="selectedUserId"></user-selector>
       <div class="tweet-box-container">
-        <tweet-box :text.sync="tweetText" :poipoi-mode="!!poipoiMode" @select-file="selectImage"  @update="validateTweetText"></tweet-box>
+        <tweet-box
+          :text.sync="tweetText"
+          :poipoi-mode="!!poipoiMode"
+          :enable-tweet-key-ctrl-enter="true"
+          :enable-tweet-key-alt-enter="true"
+          :count-func="countTweet"
+          @select-file="selectImage"
+          @update="validateTweetText"
+          @tweet="tweet"></tweet-box>
         <upload-image-list v-ref:images @update="validateImages"></upload-image-list>
         <label><input type="checkbox" v-model="sensitive">不適切な内容を含む画像として設定</label>
       </div>
@@ -37,6 +45,7 @@
 <script src="../lib/vue.min.js"></script>
 <script src="../lib/sha1.js"></script>
 <script src="../lib/oauth.js"></script>
+<script src="../lib/twitter-text.js"></script>
 <script src="../lib/jquery-3.0.0.min.js"></script>
 
 <script src="../components/ui/uploadImageList.js"></script>

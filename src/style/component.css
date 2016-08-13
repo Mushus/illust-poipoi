@@ -43,7 +43,7 @@
   height: 2rem;
   line-height: 2rem;
   text-align: right;
-  padding-right: 0.5rem;
+  padding-right: 1.5rem;
   float: right;
 }
 .tweet-box .text-limit.over {
