@@ -160,8 +160,8 @@ var app = new Vue({
 
 onunload = () => {
   Storage.saveAll({
-    [UserStorage.StorageKey]:           users,
-    [SensitiveStorage.StorageKey]:      sensitive,
-    [SelectedUserIdStorage.StorageKey]: selectedUserId
+    [UserStorage.StorageKey]:           app.users,
+    [SensitiveStorage.StorageKey]:      app.sensitive,
+    [SelectedUserIdStorage.StorageKey]: app.selectedUserId
   });
 };
