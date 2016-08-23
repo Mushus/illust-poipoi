@@ -87,7 +87,7 @@ TwitterAPI.prototype.getAccessToken = function(pin, callback) {
   $.ajax(options);
 };
 
-TwitterAPI.prototype.post = function(api, content, callback, errorCallback) {
+TwitterAPI.prototype.post = function(api, formData, content, callback, errorCallback) {
   var accessor = {
     consumerSecret: this.consumer.secret,
     tokenSecret: this.access.tokenSecret
@@ -102,19 +102,22 @@ TwitterAPI.prototype.post = function(api, content, callback, errorCallback) {
       oauth_token: this.access.token
     }
   };
-  // 送信するデータをパラメータに追加する
+  
   for ( var key in content ) {
     message.parameters[key] = content[key];
   }
+
   OAuth.setTimestampAndNonce(message);
   OAuth.SignatureMethod.sign(message, accessor);
-  //var target = OAuth.addToURL(message.action, message.parameters);
+  var target = OAuth.addToURL(message.action, message.parameters);
   var options = {
     type: message.method,
-    url: api,
-    data: message.parameters,
+    url: target,
+    data: formData,
     dataType: 'json',
-    success: (d, dt) => callback && callback(d, dt)
+    processData: false,
+    contentType: false,
+    success: function(d, dt) { callback && callback(d, dt); },
   };
   $.ajax(options).fail((data) => errorCallback && errorCallback());
 }
@@ -151,8 +154,9 @@ TwitterAPI.prototype.get = function(api, content, callback) {
 }
 
 TwitterAPI.prototype.tweet = function(text, callback) {
-  var content = {status: text};
-  this.post('https://api.twitter.com/1.1/statuses/update.json', content, callback);
+  var formData = new FormData();
+  formData.append('status', text);
+  this.post('https://api.twitter.com/1.1/statuses/update.json', formData, [], callback);
 };
 
 TwitterAPI.prototype.requestAuthorizedUserInfo = function(callback) {
@@ -198,13 +202,9 @@ TwitterAPI.prototype.uploadMediaWithBlob = function(content, callback, errorCall
       oauth_token: this.access.token
     }
   };
-  // 送信するデータをパラメータに追加する
-  for ( var key in content ) {
-     message.parameters[key] = content[key];
-  }
+
   OAuth.setTimestampAndNonce(message);
   OAuth.SignatureMethod.sign(message, accessor);
-  console.log(message)
   var target = OAuth.addToURL(message.action, message.parameters);
   var options = {
     type: message.method,
@@ -220,10 +220,11 @@ TwitterAPI.prototype.uploadMediaWithBlob = function(content, callback, errorCall
 /***/
 TwitterAPI.prototype.tweetWithMedia = function(text, mediaIds, sensitive, callback, errorCallback) {
   var content = [];
-  content.status = text;
+  var formData = new FormData();
+  formData.append('status', text);
   if (mediaIds != null) content.media_ids = mediaIds;
   if (sensitive != null) content.possibly_sensitive = sensitive;
-  this.post('https://api.twitter.com/1.1/statuses/update.json', content, callback, errorCallback);
+  this.post('https://api.twitter.com/1.1/statuses/update.json', formData, content, callback, errorCallback);
 };
 
 /*
